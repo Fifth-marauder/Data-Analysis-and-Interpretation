@@ -1,0 +1,68 @@
+---
+title: "Data Preparation - R"
+author: "Sarah Pohl"
+date: "Wednesday, September 23, 2015"
+output:
+  html_document:
+    keep_md: yes
+---
+
+```{r Prep, echo=FALSE}
+setwd("C:/Users/Sarah/Dropbox/coursera/Data Management and Visualization")
+options(stringsAsFactors=FALSE)
+```
+
+As [mentioned before](http://lilithelina.tumblr.com/post/128638794919/choice-of-language), I want to compare Python and R analysis steps in the [DataManViz](http://lilithelina.tumblr.com/tagged/DataManViz) project, so this is the R version of the [Data Preparation in Python script](http://lilithelina.tumblr.com/post/129435011659/data-preparation-python).
+
+In R, I don't need to load extra libraries for data preparation, so we can start with loading the data and having a first look.
+
+```{r ReadIn, tidy=TRUE, results='hold', comment=""}
+gapminder <- read.table("gapminder.csv", sep=",", header=TRUE, quote="\"")
+
+# print some information
+print(paste("number of observations:", nrow(gapminder)))
+print(paste("number of variables:", ncol(gapminder)))
+print("types of data:")
+str(gapminder)
+```
+
+Of course, the number of observations and variables is the same whether I use Python or R. A - very comfortable - difference between the languages is that R already guesses the data types of my variables, so I don't have to convert them to numeric before further analysis.
+
+As before, I want to create a subset of the Gapminder data set containing only the country names as unique identifiers and "breastcancerper100th", "femaleemployrate", and "internetuserate" as variables. This is just as easy in R as it is with Python:
+
+```{r Subset, tidy=TRUE, comment="", results='hold'}
+# subset data
+sub_data <- subset(gapminder, select=c("country", "breastcancerper100th", "femaleemployrate", "internetuserate"))
+
+# print the first five rows
+print("first five rows of my subsetted data:")
+head(sub_data, 5)
+```
+
+In the Python script I used the frequency tables to access the number of NAs in my data subset (and because they were required in the course). In R, to see the number and general distribution of my values of interest, I would simply look at a data summary.
+
+```{r Freq, tidy=TRUE, comment=""}
+# print a data summary, excluding the "country" variable
+summary(sub_data[,2:4])
+```
+
+Again, I can see the different numbers of NAs in my data: `r sum(is.na(sub_data$breastcancerper100th))` for the breast cancer cases, `r sum(is.na(sub_data$femaleemployrate))` for the female employ rate, and `r sum(is.na(sub_data$internetuserate))` for internet usage. Additionally, the data summary shows the minima, means, maxima and quartiles for the variables. For example, the female employment rate (considering the female population of at least 15 years of age) ranged between `r round(min(sub_data$femaleemployrate, na.rm=TRUE),2)`% and `r round(max(sub_data$femaleemployrate, na.rm=TRUE),2)`% in 2007, while the internet use rate starts as low as `r round(min(sub_data$internetuserate, na.rm=TRUE),2)` per 100 people in 2010. On average, `r round(mean(sub_data$breastcancerper100th, na.rm=TRUE),2)` per 100,000 women were diagnosed with breast cancer all over the world - and so on.
+
+Now we have to remove the rows/observations/countries that contain at least one NA, which is as easy here as it is in Python.
+
+```{r Filter, tidy=TRUE, comment="", results='hold'}
+# remove rows with NAs
+sub_data2 <- na.omit(sub_data)
+
+# print first five rows, summary and row & column number
+print("first five rows of my subsetted data:")
+head(sub_data2, 5)
+
+print("data summary:")
+summary(sub_data2[,2:4])
+
+print(paste("number of observations:", nrow(sub_data2)))
+print(paste("number of variables:", ncol(sub_data2)))
+```
+
+The result looks exactly like it did in Python: `r nrow(sub_data2)` observations/countries are in the final data set, and there are no NAs left.
