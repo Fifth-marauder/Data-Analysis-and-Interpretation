@@ -39,7 +39,7 @@ print("first five rows of my subsetted data:")
 head(sub_data, 5)
 ```
 
-In the Python script I used the frequency tables to access the number of NAs in my data subset (and because they were required in the course). In R, to see the number and general distribution of my values of interest, I would simply look at a data summary.
+In the Python script I used frequency tables to access the number of NAs in my data subset (and because they were required in the course). In R, to see the number and general distribution of my values of interest, I would simply look at a data summary.
 
 ```{r Freq, tidy=TRUE, comment=""}
 # print a data summary, excluding the "country" variable
