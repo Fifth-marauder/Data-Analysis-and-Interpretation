@@ -51,24 +51,18 @@ The problem is, I still don't know how many groups I would like to create, or wh
 
 
     # create five equal-sized groups per variable
-    sub_data2['breastGroup'] = pandas.qcut(sub_data2.breastcancerper100th,
-                                           5, labels=["very low", "low", "middle", "high", "very high"])
-    sub_data2['employGroup'] = pandas.qcut(sub_data2.femaleemployrate,
-                                           5, labels=["very low", "low", "middle", "high", "very high"])
-    sub_data2['internGroup'] = pandas.qcut(sub_data2.internetuserate,
-                                           5, labels=["very low", "low", "middle", "high", "very high"])
+    sub_data2['breastGroup'] = pandas.qcut(sub_data2.breastcancerper100th, 5)
+    sub_data2['employGroup'] = pandas.qcut(sub_data2.femaleemployrate, 5)
+    sub_data2['internGroup'] = pandas.qcut(sub_data2.internetuserate, 5)
 
 
-    ## print the first five rows of the data
-    print("first five rows of the data:\n", sub_data2.head())
-    
     ## calculate frequencies in bins
     # breast cancer rate
     breastGr_freq = pandas.concat(dict(counts = sub_data2["breastGroup"].value_counts(sort=False, dropna=False),
                                        percentages = sub_data2["breastGroup"].value_counts(sort=False, dropna=False,
                                                                                            normalize=True)),
                                 axis=1)
-    print("\nfrequency of breast cancer groups:\n", breastGr_freq)
+    print("frequency of breast cancer groups:\n", breastGr_freq)
     
     # female employment rate
     employGr_freq = pandas.concat(dict(counts = sub_data2["employGroup"].value_counts(sort=False, dropna=False),
@@ -84,45 +78,31 @@ The problem is, I still don't know how many groups I would like to create, or wh
                                 axis=1)
     print("\nfrequency of internet usage groups:\n", internetGr_freq)
 
-    first five rows of the data:
-            country  breastcancerper100th  femaleemployrate  internetuserate  \
-    0  Afghanistan                  26.8         25.600000         3.654122   
-    1      Albania                  57.4         42.099998        44.989947   
-    2      Algeria                  23.5         31.700001        12.500073   
-    4       Angola                  23.1         69.400002         9.999954   
-    6    Argentina                  73.9         45.900002        36.000335   
-    
-      breastGroup employGroup internGroup  
-    0      middle    very low    very low  
-    1   very high         low        high  
-    2         low    very low         low  
-    4         low   very high         low  
-    6   very high      middle      middle  
-    
     frequency of breast cancer groups:
-                counts  percentages
-    very low       33     0.203704
-    low            32     0.197531
-    middle         32     0.197531
-    high           32     0.197531
-    very high      33     0.203704
+                     counts  percentages
+    [3.9, 19.18]        33     0.203704
+    (19.18, 26.04]      32     0.197531
+    (26.04, 34.76]      32     0.197531
+    (34.76, 54.02]      32     0.197531
+    (54.02, 101.1]      33     0.203704
     
     frequency of female employment groups:
-                counts  percentages
-    very low       33     0.203704
-    low            32     0.197531
-    middle         32     0.197531
-    high           33     0.203704
-    very high      32     0.197531
+                     counts  percentages
+    [12.4, 36.56]       33     0.203704
+    (36.56, 44.38]      32     0.197531
+    (44.38, 50.66]      32     0.197531
+    (50.66, 58.2]       33     0.203704
+    (58.2, 83.3]        32     0.197531
     
     frequency of internet usage groups:
-                counts  percentages
-    very low       33     0.203704
-    low            32     0.197531
-    middle         32     0.197531
-    high           32     0.197531
-    very high      33     0.203704
+                        counts  percentages
+    [0.72, 7]              33     0.203704
+    (7, 16.312]            32     0.197531
+    (16.312, 39.271]       32     0.197531
+    (39.271, 63.0248]      32     0.197531
+    (63.0248, 95.638]      33     0.203704
     
 
-As we can see above, the values were grouped into five almost same-sized groups for each variable. The first five rows of the data also allow a glimpse at the binning process. For breast cancer, the cut between "low" and "middle" is above the 25th percentile (20.75), also called the first quartile, but below the median (30.45), while both "very high" values are above the 75th percentile (or third quartile) of 50.37. Roughly the same seems to be true for employment rate and internet usage, with the addition that the cut between "very low" and "low" must lie around the first quartile.  
-With regards to only the five displayed countries, no interesting relationship between breast cancer and internet usage or female employment rate is visible. Of course, five observations out of 162 are too small a sample to conclude from, so we have to wait for the next - and final - analysis step.
+As we can see above, the values were grouped into five almost same-sized groups for each variable. While the groups contain a similar number of observations each, the intervals into which the actual values were grouped vary immensely in all three variables.  
+For breast cancer, most values seem to lie between 19.18 and 34.76 (new cases per 100,000), because these two small groups are already enough to "collect" 32 observations each. Female employment rates seem to be mostly between 36.56 and 58.2%, so the middle segment. The internet usage frequency appears to be low more often than high.  
+All of this is also reflected in the differences between mean and median (50%) shown in the summary farther above. For the female employment rate, they are almost identical, while both breast cancer cases and internet usage show a lower median than mean. This hints at a right skewed distribution of these variables, which we will visualise in the next analysis step.
