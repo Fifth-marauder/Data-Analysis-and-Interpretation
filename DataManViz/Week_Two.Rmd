@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r Prep, echo=FALSE}
-setwd("C:/Users/Sarah/Dropbox/coursera/Data Management and Visualization")
+setwd("C:/Users/Sarah/Dropbox/coursera/Data Analysis and Interpretation/DataManViz")
 options(stringsAsFactors=FALSE)
 ```
 
