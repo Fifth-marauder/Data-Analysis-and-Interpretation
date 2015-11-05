@@ -12,7 +12,7 @@ setwd("C:/Users/Sarah/Dropbox/coursera/Data Analysis and Interpretation/DataManV
 options(stringsAsFactors=FALSE)
 ```
 
-As [mentioned before](http://lilithelina.tumblr.com/post/128638794919/choice-of-language), I want to compare Python and R analysis steps in the [DataManViz](http://lilithelina.tumblr.com/tagged/DataManViz) project, so this is the R version of the [Data Managment in Python script](http://lilithelina.tumblr.com/post/130065040767/data-management-python). Again, the whole thing will look better over [here](http://htmlpreview.github.io/?https://github.com/LilithElina/Data-Management-and-Visualization/blob/master/Week_Three.html).
+As [mentioned before](http://lilithelina.tumblr.com/post/128638794919/choice-of-language), I want to compare Python and R analysis steps in the [DataManViz](http://lilithelina.tumblr.com/tagged/DataManViz) project, so this is the R version of the [Data Managment in Python script](http://lilithelina.tumblr.com/post/130065040767/data-management-python). Again, the whole thing will look better over [here](http://htmlpreview.github.io/?https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/DataManViz/Week_Three.html).
 
 As with the Python script, I will first run all the code from last time in one chunk, which is really not much: just removing variables I don't need and observations for which important data is missing.
 
