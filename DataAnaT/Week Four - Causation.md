@@ -5,7 +5,7 @@ So far, in the [Data Analysis and Interpretation](https://www.coursera.org/speci
 
 In this last course week, we're adding a [moderator](https://en.wikipedia.org/wiki/Moderation_(statistics) -- a third variable that influences the relationship of our variables of interest. Since we are free to choose to which of the three methods (listed above) we applied so far we want to add this moderator, I'm going to calculate the Pearson correlation coefficient again. I have only numerical data, and using a test for numerical data makes the most sense.
 
-As before, the output will look lots better in the [nbviewer](http://nbviewer.ipython.org/github/LilithElina/Data-Analysis-and-Interpretation/tree/master/DataAnaT/Week%20Faour%20-%20Causation.ipynb) than on tumblr.
+As before, the output will look lots better in the [nbviewer](http://nbviewer.ipython.org/github/LilithElina/Data-Analysis-and-Interpretation/tree/master/DataAnaT/Week%20Four%20-%20Causation.ipynb) than on tumblr.
 
 First up comes the code to prepare the raw data. This time, I'm not only filtering for the country identifiers and breast cancer, female employment, and internet usage, but also for income per person, which is the Gross Domestic Product per capita from 2010 (same year as the internet usage), and which will be the potential moderator.
 
