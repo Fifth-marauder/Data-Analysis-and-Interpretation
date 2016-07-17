@@ -1,0 +1,80 @@
+---
+title: "Basic Linear Regression - R"
+author: "Sarah Pohl"
+#date: "17. May 2016"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r Prep, echo=FALSE}
+#setwd("C:/Users/nolah_000/Dropbox/coursera/Data Analysis and Interpretation/RegModPrac")
+setwd("C:/Users/Sarah/Dropbox/coursera/Data Analysis and Interpretation/RegModPrac")
+#setwd("C:/Users/spo12/Dropbox/coursera/Data Analysis and Interpretation/RegModPrac")
+options(stringsAsFactors=FALSE)
+```
+
+As [mentioned before](http://lilithelina.tumblr.com/post/128638794919/choice-of-language), I want to compare Python and R analysis steps in the [DataManViz](http://lilithelina.tumblr.com/tagged/DataManViz), [DataAnaT](http://lilithelina.tumblr.com/tagged/DataAnaT), and now [RegModPrac](http://lilithelina.tumblr.com/RegModPrac) projects.
+Therefore, this is the R version of the [Basic Linear Regression](http://lilithelina.tumblr.com/post/147441369709/regression-modelling-basic-linear-regression) Python script I posted a few days ago. Again, the whole thing will look better over [here](http://htmlpreview.github.io/?https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week_Two_BasicRegression.html).
+
+I will first run some of my previous code to remove variables I don't need and observations for which important data is missing.
+
+```{r Past, tidy=TRUE, comment="", message=FALSE, warning=FALSE}
+# load libraries
+library(ggplot2)
+
+# load data
+gapminder <- read.table("../gapminder.csv", sep=",", header=TRUE, quote="\"")
+
+# subset data
+sub_data <- subset(gapminder, select=c("country", "breastcancerper100th", "femaleemployrate", "internetuserate"))
+
+# remove rows with NAs
+sub_data2 <- na.omit(sub_data)
+```
+
+The course also required me to centre my explanatory variable, new breast cancer cases per 100,000 females in 2002. This way, the regression model will be easier to interpret. In `R`, I'm usually using `scale()` for such operations.
+
+```{r Centre, tidy=TRUE, comment=""}
+# centre breast cancer data
+sub_data2$breastCentre <- scale(sub_data2$breastcancerper100th, scale=FALSE)
+summary(sub_data2)
+```
+
+The mean of the original breast cancer data is `r mean(sub_data2$breastcancerper100th)`, while the mean of the centred variable is `r mean(sub_data2$breastCentre)`, or, if rounded, `r round(mean(sub_data2$breastCentre), 2)`. Nice to see that `R` has the same problems as `Python` when dealing with floats!
+
+Scatterplots including a linear regression line visualise what I'm going to calculate:
+
+```{r Scatter, tidy=TRUE, comment="", results="hold"}
+# scatterplot for breast cancer versus internet usage
+ggplot(sub_data2, aes(x = breastCentre, y = internetuserate)) + geom_point(colour="blue") + 
+    geom_smooth(method = lm) + xlab("breast cancer cases 2002") + ylab("internet use rate 2010") + 
+    ggtitle("Scatterplot for the Association between\nBreast Cancer and Internet Usage") + 
+    theme(plot.title = element_text(size = 10), axis.title.x = element_text(size = 8), 
+        axis.title.y = element_text(size = 8))
+
+# scatterplot for breast cancer versus female employment
+ggplot(sub_data2, aes(x = breastCentre, y = femaleemployrate)) + geom_point(colour="blue") + 
+    geom_smooth(method = lm) + xlab("breast cancer cases 2002") + ylab("female employ rate 2007") + 
+    ggtitle("Scatterplot for the Association between\nBreast Cancer and Female Employment") + 
+    theme(plot.title = element_text(size = 10), axis.title.x = element_text(size = 8), 
+        axis.title.y = element_text(size = 8))
+```
+
+While there seems to be a linear relationship between breast cancer and internet usage, this cannot be said for breast cancer and female employment. This relationship seems to be more complex, which I've discussed [before](http://lilithelina.tumblr.com/post/144502768654/data-analysis-moderators-r).
+
+The linear regression function `lm()` (here not specifically for OLS) works essentially in the same way the `Python` function did: you enter the response variable, a tilde, the explanatory variable, and the name of the data set from which to take these.
+
+```{r Regression1, tidy=TRUE, comment=""}
+fit1 <- lm(internetuserate ~ breastCentre, data=sub_data2)
+summary(fit1)
+```
+
+The result is less structured, but also essentially the same: we get the coefficients, the $r^2$ value, the F-statistic, and a *p*-value. The actual values are identical to the results from the [Python script](http://lilithelina.tumblr.com/post/147441369709/regression-modelling-basic-linear-regression), showing that there is a strong linear association between new breast cancer cases per 100,000 in 2002 and the internet use rate from 2010. The regression formula would again be `internet usage = 34.08 + 0.95 * breast cancer`, indicating that if the breast cancer variable is increased by one, the internet use rate would be increased almost as much.
+
+```{r Regression2, tidy=TRUE, comment=""}
+fit2 <- lm(femaleemployrate ~ breastCentre, data=sub_data2)
+summary(fit2)
+```
+
+The results for the association between female employment from 2007 with breast cancer are also the same as before, which means that there is no linear relationship between the two variables. This also means that `R`'s `lm()` function essentially calculates an ordinary least squares regression.
