@@ -64,7 +64,7 @@ ggplot(sub_data2, aes(x = breastCentre, y = internetuserate)) + geom_point(colou
         axis.title.y = element_text(size = 8))
 ```
 
-![](Week_Two_BasicRegression_files/figure-html/Scatter-1.png)
+![](Week_Two_BasicRegression_files/figure-html/Scatter-1.png)<!-- -->
 
 ```r
 # scatterplot for breast cancer versus female employment
@@ -75,7 +75,7 @@ ggplot(sub_data2, aes(x = breastCentre, y = femaleemployrate)) + geom_point(colo
         axis.title.y = element_text(size = 8))
 ```
 
-![](Week_Two_BasicRegression_files/figure-html/Scatter-2.png)
+![](Week_Two_BasicRegression_files/figure-html/Scatter-2.png)<!-- -->
 
 While there seems to be a linear relationship between breast cancer and internet usage, this cannot be said for breast cancer and female employment. This relationship seems to be more complex, which I've discussed [before](http://lilithelina.tumblr.com/post/144502768654/data-analysis-moderators-r).
 
