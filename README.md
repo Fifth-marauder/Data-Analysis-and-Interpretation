@@ -24,3 +24,4 @@ Below, you can find a list of the courses and their weekly assignments I have al
 * [Introduction to regression](https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week%20One.md)
 * Basics of linear regression ([Python](https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week%20Two%20-%20Basic%20Linear%20Regression.md) | [R](https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week_Two_BasicRegression.md))
 * Multiple regression ([Python](https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week%20Three%20-%20Polynomial%20Regression.md) | [R](https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week_Three_PolynomialRegression.md))
+* Logistic regression ([Python](https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week%20Four%20-%20Logistic%20Regression.md) | R)
