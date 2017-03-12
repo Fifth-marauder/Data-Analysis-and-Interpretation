@@ -1,0 +1,128 @@
+---
+title: "Logistic Regression"
+author: "Sarah Pohl"
+#date: "7 März 2017"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+As mostly [mentioned first](http://lilithelina.tumblr.com/post/128638794919/choice-of-language), I want to compare `Python` and `R` analysis steps in the [DataManViz](http://lilithelina.tumblr.com/tagged/DataManViz), [DataAnaT](http://lilithelina.tumblr.com/tagged/DataAnaT), and [RegModPrac](http://lilithelina.tumblr.com/RegModPrac) projects.
+Therefore, this is the `R` version of the [Logistic Regression](http://lilithelina.tumblr.com/post/154204468274/logistic-regression-python) `Python` script I posted before. Here, I'll use logistic regression to test the association between internet use rate (my response variable, this time binned into two categories) and multiple explanatory variables - but first and foremost new breast cancer cases.  
+Again, the whole thing will look better over [here](http://htmlpreview.github.io/?https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week_Four_LogsiticRegression.html). I had to switch back to using RMarkdown, since Jupyter had some problems I do not yet understand.
+
+I will first run some of my previous code to remove variables I don't need and observations for which important data is missing.
+
+```{r Prep, echo=FALSE}
+#setwd("C:/Users/nolah_000/Dropbox/coursera/Data Analysis and Interpretation/RegModPrac")
+setwd("C:/Users/Sarah/Dropbox/coursera/Data Analysis and Interpretation/RegModPrac")
+#setwd("C:/Users/spo12/Dropbox/coursera/Data Analysis and Interpretation/RegModPrac")
+options(stringsAsFactors=FALSE)
+```
+
+```{r Past, tidy=TRUE}
+# load data
+gapminder <- read.table("../gapminder.csv", sep=",", header=TRUE, quote="\"")
+# set row names
+rownames(gapminder) <- gapminder$country
+
+# subset data
+sub_data <- subset(gapminder, select=c("breastcancerper100th", "urbanrate", "internetuserate", "incomeperperson"))
+
+# remove rows with NAs
+sub_data2 <- na.omit(sub_data)
+```
+
+Internet usage, my response variable, has to be in a binary format for logistic regression to work. In my `Python` script, I decided to use the 25% quartile (`9.1`) as cut-off, so I'll do the same here.
+
+```{r BinResp, tidy=TRUE, comment=""}
+# bin response variable
+sub_data2$internetBin <- as.numeric(sub_data2$internetuserate > 9.1)
+summary(sub_data2)
+```
+
+For the binning, I'm using a simple test whether the internet usage in a country is above my threshold or not. The `as.numeric()` will automatically convert every returned `TRUE` to a `1`, and every `FALSE` to a `0` -- and done is my conversion.
+
+Let's go ahead with the logistic regression!
+
+```{r LogReg1, tidy=TRUE, comment=""}
+fit1 <- glm(internetBin ~ breastcancerper100th, data=sub_data2, family="binomial")
+summary(fit1)
+```
+
+The model results look quite different from those returned by `Python`. Already familiar are the coefficients shown in the middle of the results, which say that there is a significant, positive association between internet usage and breast cancer. From the parameter estimate, the [odds ratio](http://www.theanalysisfactor.com/why-use-odds-ratios/) can again be calculated, but for that it might be nice to have the confidence intervals as well. Luckily, these are relatively easy to obtain:
+
+```{r ORconf1, tidy=TRUE, comment="", results='hold'}
+conf1 <- confint(fit1)
+conf1 <- cbind(conf1, "OR"=coef(fit1))
+
+print("odds ratio with confidence intervals")
+exp(conf1)
+```
+
+The values are the same as in `Python`, so the `OR > 1` again signifies that internet usage will be higher in countries with higher breast cancer prevalence.
+
+Below the coefficients, the `R` function lists deviance values. I am not really sure what they signify in the context of logistic regression, but apparently the goal of the model is to reduce them as much as possible. How successful the model is at that task can be analysed with an a deviance table using the [Chi square](http://lilithelina.tumblr.com/post/134387869079/data-analysis-chi-square-r) test to calculate test statistics:
+
+```{r ORchi1, tidy=TRUE, comment=""}
+anova(fit1, test="Chisq")
+```
+
+The null model uses only the intercept and no explanatory variable, resulting in a high deviance. With breast cancer as explanatory variable, a significant reduction of deviance takes place. If the model would contain more explanatory variables, the test would add them one at a time and determine their effect on the deviance.  
+Time to add another explanatory variable!
+
+```{r LogReg2, tidy=TRUE, comment=""}
+fit2 <- glm(internetBin ~ breastcancerper100th + incomeperperson, data=sub_data2, family="binomial")
+summary(fit2)
+```
+
+In [Python](http://lilithelina.tumblr.com/post/154204468274/logistic-regression-python), using both breast cancer and income as explanatory variables resulted in a warning about quasi complete separation of the two internet usage groups. This is not the case here, I wonder why...
+
+Let's have a look at the odds ratios and deviance again...
+
+```{r ORconf2, tidy=TRUE, comment="", results='hold'}
+conf2 <- confint(fit2)
+conf2 <- cbind(conf2, "OR"=coef(fit2))
+
+print("odds ratio with confidence intervals")
+exp(conf2)
+```
+
+Ah, here we go! This warning indicates that there is (quasi) complete separation happening, so I'll just move on to my third model, using breast cancer and urbanisation as explanatory variables.
+
+```{r LogReg3, tidy=TRUE, comment=""}
+fit3 <- glm(internetBin ~ breastcancerper100th + urbanrate, data=sub_data2, family="binomial")
+summary(fit3)
+```
+
+All right, what do the additional tests say this time?
+
+```{r ORconf3, tidy=TRUE, comment="", results='hold'}
+conf3 <- confint(fit3)
+conf3 <- cbind(conf3, "OR"=coef(fit3))
+
+print("odds ratio with confidence intervals")
+exp(conf3)
+```
+
+```{r ORchi3, tidy=TRUE, comment=""}
+print("Chi-squared test of deviance")
+anova(fit3, test="Chisq")
+```
+
+The odds ratio for an association between breast cancer and internet usage decreased a bit when urbanisation was added to the model -- as before. On the other hand, the residual deviance also decreases significantly upon addition of that second explanatory variable, so it definitely improves the model, while not being a confounder (since breast cancer is still significantly associated with internet usage).
+
+We can also subtract the null deviance from the other residual deviances calculated here, to have a simple view of the effect of the different explanatory variables. A high deviance is problematic, and since usually the null deviance (with the model using only the intercept) is higher than the deviance when explanatory variables are included, the differences shows just how much the model improved upon the addition of the variable.
+
+```{r Comp, tidy=TRUE, comment="", results='hold'}
+print("difference in residual deviance using only breast cancer")
+with(fit1, null.deviance - deviance)
+
+print("difference in residual deviance using breast cancer and internet usage")
+with(fit2, null.deviance - deviance)
+
+print("difference in residual deviance using breast cancer and urbanisation")
+with(fit3, null.deviance - deviance)
+```
+
+The addition of other explanatory variables definitely improved my logistic model, but overall I think it's nowhere near the multiple linear regression which can directly work with my continuous data.
