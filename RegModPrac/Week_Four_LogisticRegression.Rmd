@@ -9,7 +9,7 @@ output:
 
 As mostly [mentioned first](http://lilithelina.tumblr.com/post/128638794919/choice-of-language), I want to compare `Python` and `R` analysis steps in the [DataManViz](http://lilithelina.tumblr.com/tagged/DataManViz), [DataAnaT](http://lilithelina.tumblr.com/tagged/DataAnaT), and [RegModPrac](http://lilithelina.tumblr.com/RegModPrac) projects.
 Therefore, this is the `R` version of the [Logistic Regression](http://lilithelina.tumblr.com/post/154204468274/logistic-regression-python) `Python` script I posted before. Here, I'll use logistic regression to test the association between internet use rate (my response variable, this time binned into two categories) and multiple explanatory variables - but first and foremost new breast cancer cases.  
-Again, the whole thing will look better over [here](http://htmlpreview.github.io/?https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week_Four_LogsiticRegression.html). I had to switch back to using RMarkdown, since Jupyter had some problems I do not yet understand.
+Again, the whole thing will look better over [here](http://htmlpreview.github.io/?https://github.com/LilithElina/Data-Analysis-and-Interpretation/blob/master/RegModPrac/Week_Four_LogisticRegression.html). I had to switch back to using RMarkdown, since Jupyter had some problems I do not yet understand.
 
 I will first run some of my previous code to remove variables I don't need and observations for which important data is missing.
 
