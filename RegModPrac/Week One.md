@@ -1,6 +1,6 @@
 ## Describing Data
 
-It's time to start the next course in the [Data Analysis and Interpretation](https://www.coursera.org/specializations/data-analysis) specialisation of Wesleyan University: [Regression Modeling in Practice](https://www.coursera.org/learn/regression-modeling-practice/home/welcome)! (Previous work can be found [here]((http://lilithelina.tumblr.com/DataManViz) and [here](http://lilithelina.tumblr.com/DataAnaT).) In the first week, we learned what the difference between observational and experimental data is, what some common problems about data and experimental design are, and that correlation does not equal causation. Topic of our first assignment is describing our data, though, so here goes...
+It's time to start the next course in the [Data Analysis and Interpretation](https://www.coursera.org/specializations/data-analysis) specialisation of Wesleyan University: [Regression Modeling in Practice](https://www.coursera.org/learn/regression-modeling-practice/home/welcome)! (Previous work can be found [here](http://lilithelina.tumblr.com/DataManViz) and [here](http://lilithelina.tumblr.com/DataAnaT).) In the first week, we learned what the difference between observational and experimental data is, what some common problems about data and experimental design are, and that correlation does not equal causation. Topic of our first assignment is describing our data, though, so here goes...
 
 
 **Sample**
